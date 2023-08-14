@@ -1,6 +1,6 @@
 # Docker + PHP 8.2 + MySQL + Nginx + Symfony 6.2
 
-## Installation
+## Instalação
 
 1. Clone este repositório.
 
@@ -20,9 +20,21 @@
 DATABASE_URL=mysql://user:123@db:3306/jn2_controle_cliente?serverVersion=8.0.33
 ```
 
-8. O sistema contém os seguintes endpoints
+OBS: Você pode alterar o nome, usuário e senha do banco de dados no .env arquivo na raiz do projeto.
+
+
+8. Dentro do `php` container, execute `php bin/console doctrine:migrations:migrate`
+
+
+9. Documentação basta adicionar na URL `/api`
+    Ex: http://localhost/api/
 
     <img src="/endpoints.JPG" width="500">
 
-OBS: Você pode alterar o nome, usuário e senha do banco de dados no .env arquivo na raiz do projeto.
+
+9. Exemplo cadastro cliente POSTMAN 
+
+   <img src="/evidencia-cadastro-cliente.JPG" width="500">
+
+
 
