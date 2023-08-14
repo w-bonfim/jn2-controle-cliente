@@ -2,7 +2,7 @@
 
 ## Installation
 
-1. 😀 Clone este repositório.
+1. Clone este repositório.
 
 2. Se você estiver trabalhando com o Docker Desktop para Mac, verifique **you have enabled `VirtioFS` for your sharing implementation**. `VirtioFS` traz desempenho de E/S aprimorado para operações em montagens vinculadas. A ativação do VirtioFS ativará automaticamente a estrutura de virtualização.
 
@@ -20,5 +20,9 @@
 DATABASE_URL=mysql://user:123@db:3306/jn2_controle_cliente?serverVersion=8.0.33
 ```
 
-Você pode alterar o nome, usuário e senha do banco de dados no .env arquivo na raiz do projeto.
+8. O sistema contém os seguintes endpoints
+
+    <img src="/endpoints.JPG" width="500">
+
+OBS: Você pode alterar o nome, usuário e senha do banco de dados no .env arquivo na raiz do projeto.
 
