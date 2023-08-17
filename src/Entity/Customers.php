@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use App\Entity\Cars;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CustomersRepository::class)]
 #[UniqueEntity(fields: ['cpf'], message:"CPF já está sendo utilizado.")]
@@ -34,7 +35,8 @@ use App\Entity\Cars;
         uriTemplate: '/cliente/{id}', 
         requirements: ['id' => '\d+']
     )   
-])]
+    ]
+    )]
 class Customers
 {
     #[ORM\Id]
@@ -46,20 +48,23 @@ class Customers
     #[Assert\NotBlank(
         message: 'nome é obrigatório'
     )]
+    #[Groups('customers')]
     private ?string $name = null;
 
     #[ORM\Column(length: 11, unique: true)]
     #[Assert\NotBlank(message: 'CPF é obrigatório')]
     #[MyConstrait\IsCpf]
+    #[Groups('customers')]
     private ?string $cpf = null;
 
     #[ORM\Column(length: 15)]
     #[Assert\NotBlank(
         message: 'telefone é obrigatório'
     )]
+    #[Groups('customers')]
     private ?string $phone = null;
 
-    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Cars::class)]
+    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Cars::class, cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
     private Collection $cars;
 
     public function __construct()
@@ -91,7 +96,7 @@ class Customers
 
     public function setCpf(string $cpf): static
     {
-        $this->cpf = $cpf;
+        $this->cpf = str_replace(array('.','-','/'), "", $cpf);
 
         return $this;
     }
@@ -103,7 +108,7 @@ class Customers
 
     public function setPhone(string $phone): static
     {
-        $this->phone = $phone;
+        $this->phone = str_replace(array('(',')',' '), "", $phone);
 
         return $this;
     }
