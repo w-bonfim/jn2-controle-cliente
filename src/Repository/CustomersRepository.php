@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Cars;
 use App\Entity\Customers;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,28 +22,33 @@ class CustomersRepository extends ServiceEntityRepository
         parent::__construct($registry, Customers::class);
     }
 
-//    /**
-//     * @return Customers[] Returns an array of Customers objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   public function saveCostumer($request): ?Customers
+   {
+        $em = $this->getEntityManager();
 
-//    public function findOneBySomeField($value): ?Customers
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $data = json_decode(file_get_contents('php://input'), true);
+        $name = isset($data['name']) ? $data['name'] : null;
+        $cpf = isset($data['cpf']) ? str_replace(array('.','-','/'), "", $data['cpf']) : null;
+        $phone = isset($data['phone']) ? $data['phone'] : null;
+        $plate = isset($data['plate']) ? $data['plate'] : null;
+
+        $customer = $em->getRepository(Customers::class)->findOneBy(['cpf' => $cpf]);
+        if (!$customer) {
+            $customer = new Customers();
+        }
+      
+        $customer->setName($name);
+        $customer->setCpf($cpf);
+        $customer->setPhone($phone);
+        
+        $car = new Cars();
+        $car->setPlate($plate);
+
+        $customer->addCar($car);
+
+        $em->persist($customer);
+        $em->flush();
+
+        return $customer;
+   }
 }

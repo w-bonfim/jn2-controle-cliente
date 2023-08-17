@@ -15,13 +15,17 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use App\Entity\Cars;
+use App\ApiResource\Action\CustomersAction;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CustomersRepository::class)]
 #[UniqueEntity(fields: ['cpf'], message:"CPF já está sendo utilizado.")]
 #[ApiResource(operations: [
     new Post(
-        uriTemplate: '/clienteCadastro'
+        name: 'saveCustomer',
+        uriTemplate: '/clienteCadastro', 
+        controller: CustomersAction::class,
+        // read: false
     ),
     new Put(
         uriTemplate: '/cliente/{id}', 
@@ -34,7 +38,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     new Get(
         uriTemplate: '/cliente/{id}', 
         requirements: ['id' => '\d+']
-    )   
+    )
     ]
     )]
 class Customers
